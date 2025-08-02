@@ -1,11 +1,8 @@
-# from amd64/debian:bullseye-20231218-slim
-from amd64/debian:bullseye-20240110-slim
-# from amd64/debian:bullseye-20241223-slim
-# from amd64/debian:bullseye-20250630-slim
-# from amd64/debian:bullseye-20250721-slim
+from docker.io/amd64/debian:bullseye-20250721-slim
 
-run echo 'deb http://deb.debian.org/debian bullseye main' \
- > /etc/apt/sources.list
+run echo 'deb http://deb.debian.org/debian bullseye main' > /etc/apt/sources.list
+run echo 'deb http://deb.debian.org/debian bullseye-updates main' >> /etc/apt/sources.list
+run echo 'deb http://security.debian.org/debian-security bullseye-security main' >> /etc/apt/sources.list
 
 run apt-get update \
  && apt-get upgrade -y \
@@ -18,9 +15,6 @@ run apt-get install --no-install-recommends -y openssl ca-certificates \
  && openssl version
 
 run update-ca-certificates -f
-
-run apt-get install --no-install-recommends -y git-core \
- && git --version
 
 run apt-get install --no-install-recommends -y gpg gpg-agent \
  && gpg --version
@@ -37,6 +31,9 @@ run mkdir /opt/yq-${YQ_VERSION} && \
   -o /opt/yq-${YQ_VERSION}/yq \
  && chmod +x /opt/yq-${YQ_VERSION}/yq \
  && yq --version
+
+run apt-get install --no-install-recommends -y git \
+ && git --version
 
 run ln -s /bin/bash /usr/local/bin/bash \
  && /usr/local/bin/bash --version

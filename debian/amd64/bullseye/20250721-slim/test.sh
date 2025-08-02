@@ -5,7 +5,7 @@ PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
 REPOSITORY="debian-${ARCH}"
-TAG='7a'
+TAG='8a'
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
 #docker build --no-cache -f Dockerfile \
@@ -15,7 +15,7 @@ docker build -f Dockerfile \
 if test $? -ne 0; then
  echo "Docker build error!"; exit 21; fi
 
-CONTAINER_NAME="container.${TYPE}"
+CONTAINER_NAME="container.${REPOSITORY}"
 
 docker stop "${CONTAINER_NAME}"
 docker rm -f "${CONTAINER_NAME}"
