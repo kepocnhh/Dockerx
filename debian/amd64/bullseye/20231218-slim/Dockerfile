@@ -31,5 +31,8 @@ run mkdir /opt/yq-${YQ_VERSION} && \
  && chmod +x /opt/yq-${YQ_VERSION}/yq \
  && yq --version
 
+run apt-get install --no-install-recommends -y git-core \
+ && git --version
+
 run ln -s /bin/bash /usr/local/bin/bash \
  && /usr/local/bin/bash --version

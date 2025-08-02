@@ -5,10 +5,11 @@ PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
 REPOSITORY="debian-${ARCH}"
-TAG='6b'
+TAG='6c'
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
-docker build --no-cache -f Dockerfile \
+#docker build --no-cache -f Dockerfile \
+docker build -f Dockerfile \
  --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
 
 if test $? -ne 0; then
@@ -31,6 +32,10 @@ for it in \
  'gpg --version' \
  'zip --version' \
  'yq --version' \
+ 'git --version' \
+ 'git clone https://github.com/kepocnhh/Dockerx.git' \
+ 'git -C ./Dockerx status' \
+ 'cat ./Dockerx/README.md' \
  '/usr/local/bin/bash --version'; do
  docker exec "${CONTAINER_NAME}" /usr/local/bin/bash -c "$it"
  if test $? -ne 0; then echo 'Exec error!'; exit 1; fi
