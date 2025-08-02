@@ -4,8 +4,8 @@ ARCH='amd64'
 PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
-REPOSITORY="debian-${ARCH}"
-TAG='8a'
+REPOSITORY="jdk-${ARCH}"
+TAG='17.0.11-oracle'
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
 docker build --no-cache -f Dockerfile \
@@ -26,16 +26,7 @@ if test $? -ne 0; then
  echo 'Run error!'; exit 1; fi
 
 for it in \
- 'curl --version' \
- 'openssl version' \
- 'gpg --version' \
- 'zip --version' \
- 'yq --version' \
- 'git --version' \
- 'git clone https://github.com/kepocnhh/Dockerx.git' \
- 'git -C ./Dockerx status' \
- 'cat ./Dockerx/README.md' \
- '/usr/local/bin/bash --version'; do
+ 'java --version'; do
  docker exec "${CONTAINER_NAME}" /usr/local/bin/bash -c "$it"
  if test $? -ne 0; then echo 'Exec error!'; exit 1; fi
 done
