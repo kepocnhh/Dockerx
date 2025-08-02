@@ -5,7 +5,7 @@ PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
 REPOSITORY="jdk-${ARCH}"
-TAG='17.0.11-oracle'
+TAG='17.0.11'
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
 docker build --no-cache -f Dockerfile \
