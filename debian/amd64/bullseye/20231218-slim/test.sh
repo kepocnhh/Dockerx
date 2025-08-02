@@ -8,8 +8,7 @@ REPOSITORY="debian-${ARCH}"
 TAG='6c'
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
-#docker build --no-cache -f Dockerfile \
-docker build -f Dockerfile \
+docker build --no-cache -f Dockerfile \
  --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
 
 if test $? -ne 0; then
