@@ -4,9 +4,10 @@ A few dockerfiles.
 ---
 
 ```
-┌ debian
-├ ┬ {arch}
-. .
+┌ debian-amd64
+├─┬ jdk-17.0.11
+│ └── gradle-8.10.2
+.
 ```
 
 ---
