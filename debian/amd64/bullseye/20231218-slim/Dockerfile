@@ -1,7 +1,4 @@
 from amd64/debian:bullseye-20231218-slim
-# from amd64/debian:bullseye-20241223-slim
-# from amd64/debian:bullseye-20250630-slim
-# from amd64/debian:bullseye-20250721-slim
 
 run echo 'deb http://deb.debian.org/debian bullseye main' \
  > /etc/apt/sources.list
