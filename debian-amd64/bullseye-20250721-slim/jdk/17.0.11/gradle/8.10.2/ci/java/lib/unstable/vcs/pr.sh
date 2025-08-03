@@ -30,8 +30,8 @@ if test $? -ne 0; then echo "Config error!"; exit 1; fi
 git merge --no-ff --no-commit "${SOURCE_COMMIT}"
  if test $? -ne 0; then echo 'Merge error!'; exit 1; fi
 
-${VARIANT}/metadata/assemble.sh
- && ${VARIANT}/vcs/commit.sh
+${VARIANT}/metadata/assemble.sh \
+ && ${VARIANT}/vcs/commit.sh \
  && ${VARIANT}/check.sh
 if test $? -ne 0; then echo 'Pipeline error!'; exit 1; fi
 

@@ -5,7 +5,7 @@ PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
 REPOSITORY="ci-java-lib-${ARCH}"
-TAG='0.2b'
+TAG='0.3b'
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
 docker build --no-cache --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
