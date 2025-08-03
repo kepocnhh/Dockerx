@@ -4,8 +4,8 @@ ARCH='amd64'
 PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
-REPOSITORY="ci-java-lib-${ARCH}"
-TAG='0.3b'
+REPOSITORY="ci-jlu-${ARCH}"
+TAG='0.4b'
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
 docker build --no-cache --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
@@ -30,7 +30,7 @@ REPOSITORY_NAME='Useless.Java.Lib'
 if test $? -ne 0; then
  echo 'Make dir error!'; exit 1; fi
 
-SOURCE_COMMIT='d2f822e223b178c503d74ccf556d943c0aaabcef'
+SOURCE_COMMIT='87b6a7cd422cc0e5ea8735b1112b71785cd84f60'
 
 for it in \
  'git init' \
