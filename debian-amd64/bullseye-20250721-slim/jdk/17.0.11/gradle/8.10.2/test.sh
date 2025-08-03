@@ -34,7 +34,9 @@ done
 REPOSITORY_OWNER='kepocnhh'
 REPOSITORY_NAME='Useless.Java.Lib'
 
-docker exec "${CONTAINER_NAME}" mkdir -p "/$REPOSITORY_OWNER/$REPOSITORY_NAME"
+WORK_DIR="/${REPOSITORY_OWNER}/${REPOSITORY_NAME}"
+
+docker exec "${CONTAINER_NAME}" mkdir -p "${WORK_DIR}"
 
 if test $? -ne 0; then
  echo 'Make dir error!'; exit 1; fi
@@ -46,14 +48,14 @@ for it in \
  "git remote add origin https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}.git" \
  "git fetch origin ${SOURCE_COMMIT}" \
  "git checkout ${SOURCE_COMMIT}"; do
- docker exec -w "/${REPOSITORY_OWNER}/${REPOSITORY_NAME}" "${CONTAINER_NAME}" /usr/local/bin/bash -c "${it}"
+ docker exec -w "${WORK_DIR}" "${CONTAINER_NAME}" /usr/local/bin/bash -c "${it}"
  if test $? -ne 0; then echo 'Checkout error!'; exit 1; fi
 done
 
 for it in \
  'gradle clean' \
  'gradle sample:run'; do
- docker exec -w "/${REPOSITORY_OWNER}/${REPOSITORY_NAME}" "${CONTAINER_NAME}" /usr/local/bin/bash -c "${it}"
+ docker exec -w "${WORK_DIR}" "${CONTAINER_NAME}" /usr/local/bin/bash -c "${it}"
  if test $? -ne 0; then echo 'Gradle error!'; exit 1; fi
 done
 
