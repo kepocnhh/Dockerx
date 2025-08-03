@@ -31,5 +31,31 @@ for it in \
  if test $? -ne 0; then echo 'Exec error!'; exit 1; fi
 done
 
+REPOSITORY_OWNER='kepocnhh'
+REPOSITORY_NAME='Useless.Java.Lib'
+
+docker exec "${CONTAINER_NAME}" mkdir -p "/$REPOSITORY_OWNER/$REPOSITORY_NAME"
+
+if test $? -ne 0; then
+ echo 'Make dir error!'; exit 1; fi
+
+SOURCE_COMMIT='2261774a894a8b5ab70920fc8a3796fefdc968a5'
+
+for it in \
+ 'git init' \
+ "git remote add origin https://github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}.git" \
+ "git fetch origin ${SOURCE_COMMIT}" \
+ "git checkout ${SOURCE_COMMIT}"; do
+ docker exec -w "/${REPOSITORY_OWNER}/${REPOSITORY_NAME}" "${CONTAINER_NAME}" /usr/local/bin/bash -c "${it}"
+ if test $? -ne 0; then echo 'Checkout error!'; exit 1; fi
+done
+
+for it in \
+ 'gradle clean' \
+ 'gradle sample:run'; do
+ docker exec -w "/${REPOSITORY_OWNER}/${REPOSITORY_NAME}" "${CONTAINER_NAME}" /usr/local/bin/bash -c "${it}"
+ if test $? -ne 0; then echo 'Gradle error!'; exit 1; fi
+done
+
 docker stop "${CONTAINER_NAME}"
 docker rm -f "${CONTAINER_NAME}"
