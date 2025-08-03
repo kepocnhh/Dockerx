@@ -5,7 +5,7 @@ PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
 REPOSITORY="debian-${ARCH}"
-TAG='8a'
+TAG='8b'
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
 docker build --no-cache -f Dockerfile \
@@ -31,6 +31,7 @@ for it in \
  'gpg --version' \
  'zip --version' \
  'yq --version' \
+ 'echo "foo: bar" | yq -erM .foo' \
  'git --version' \
  'git clone https://github.com/kepocnhh/Dockerx.git' \
  'git -C ./Dockerx status' \
