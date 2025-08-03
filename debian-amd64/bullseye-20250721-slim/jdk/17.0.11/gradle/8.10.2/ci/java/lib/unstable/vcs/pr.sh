@@ -19,7 +19,7 @@ git init \
  && git remote add origin "https://${VCS_PAT}@github.com/${REPOSITORY_OWNER}/${REPOSITORY_NAME}.git" \
  && git fetch origin "${TARGET_BRANCH}" \
  && git fetch origin "${SOURCE_COMMIT}" \
- && git checkout "${TARGET_BRANCH}"
+ && git switch "${TARGET_BRANCH}"
 
 if test $? -ne 0; then echo 'Checkout error!'; exit 1; fi
 
