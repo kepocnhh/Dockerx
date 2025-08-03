@@ -1,4 +1,4 @@
-from docker.io/kepocnhh/jdk-amd64:17.0.11
+from docker.io/kepocnhh/jdk-amd64:17.0.11b
 
 env GRADLE_VERSION='8.10.2'
 run curl -L "https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" -o /tmp/foo \

@@ -5,7 +5,7 @@ PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
 REPOSITORY="gradle-${ARCH}"
-TAG='8.10.2'
+TAG='8.10.2b'
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
 docker build --no-cache -f Dockerfile \
