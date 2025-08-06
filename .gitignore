@@ -1,5 +1,5 @@
 /*
-!/debian-amd64
-!/debian-arm64v8
+!/amd64
+!/arm64
 !.gitignore
 !README.md
