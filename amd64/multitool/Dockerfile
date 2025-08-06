@@ -1,4 +1,4 @@
-from docker.io/kepocnhh/gradle-amd64:8.10.2b
+from docker.io/kepocnhh/gradle-amd64:8.10.2c
 
 workdir /workdir
 

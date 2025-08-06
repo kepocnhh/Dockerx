@@ -45,7 +45,10 @@ for it in \
  '$mt/vcs/merge.sh' \
  '$mt/java/lib/unstable/assemble.sh' \
  '$mt/vcs/commit.sh "msg" "tag"' \
- '$mt/java/lib/unstable/check.sh'; do
+ '$mt/java/lib/unstable/check.sh' \
+ 'echo foobarbaz > /tmp/foo.txt' \
+ '$mt/secrets/sha256.sh /tmp/foo.txt' \
+ 'cat /tmp/foo.txt.sha256'; do
  docker exec "${CONTAINER_NAME}" /usr/local/bin/bash -c "${it}"
  if test $? -ne 0; then echo 'Exec error!'; exit 1; fi
 done
