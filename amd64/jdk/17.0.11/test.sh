@@ -9,7 +9,8 @@ JDK_VERSION='17.0.11'
 TAG="${JDK_VERSION}c"
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
-docker build --no-cache -f "${ARCH}/jadkDockerfile" \
+docker build --no-cache \
+ -f "${ARCH}/jdk/${JDK_VERSION}/Dockerfile" \
  --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
 
 if test $? -ne 0; then
