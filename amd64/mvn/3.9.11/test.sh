@@ -25,6 +25,7 @@ docker run --platform="${PLATFORM}" -id --name "${CONTAINER_NAME}" "${IMAGE_NAME
 if test $? -ne 0; then echo 'Run error!'; exit 1; fi
 
 for it in \
+ 'yq ~/.m2/settings.xml' \
  'mvn --version' \
  '${MAVEN_HOME}/bin/mvn --version' \
  'cat ${MAVEN_HOME}/README.txt'; do
