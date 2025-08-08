@@ -42,6 +42,9 @@ for it in \
 done
 
 for it in \
+ 'java --version' \
+ 'gradle --version' \
+ 'mvn --version' \
  '$mt/vcs/merge.sh' \
  '$mt/java/lib/unstable/assemble.sh' \
  '$mt/vcs/commit.sh "msg" "tag"' \
