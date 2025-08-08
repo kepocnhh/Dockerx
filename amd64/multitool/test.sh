@@ -5,7 +5,7 @@ PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
 REPOSITORY="multitool-${ARCH}"
-MULTITOOL_VERSION='0.3.1'
+MULTITOOL_VERSION='0.4.0'
 TAG="${MULTITOOL_VERSION}c"
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
@@ -48,7 +48,8 @@ for it in \
  '$mt/java/lib/unstable/check.sh' \
  'echo foobarbaz > /tmp/foo.txt' \
  '$mt/secrets/sha256.sh /tmp/foo.txt' \
- 'cat /tmp/foo.txt.sha256'; do
+ 'cat /tmp/foo.txt.sha256' \
+ 'cat $mt/README.md'; do
  docker exec "${CONTAINER_NAME}" /usr/local/bin/bash -c "${it}"
  if test $? -ne 0; then echo 'Exec error!'; exit 1; fi
 done
