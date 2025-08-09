@@ -31,6 +31,7 @@ if test $? -ne 0; then
  echo 'Run error!'; exit 1; fi
 
 for it in \
+ "test \"\$(cat /etc/flavor)\" == \"${IMAGE_FLAVOR}\"" \
  'java --version'; do
  docker exec "${CONTAINER_NAME}" /usr/local/bin/bash -c "$it"
  if test $? -ne 0; then echo 'Exec error!'; exit 1; fi
@@ -39,15 +40,20 @@ done
 docker stop "${CONTAINER_NAME}"
 docker rm -f "${CONTAINER_NAME}"
 
+echo "Push to Docker repository?"
+read -r YES_OR_NOT
+
+if test "${YES_OR_NOT}" != 'yes'; then exit 0; fi
+
 docker push "${IMAGE_NAME}"
 if test $? -ne 0; then echo 'Push error!'; exit 1; fi
 
 echo "Docker image ${IMAGE_NAME} pushed."
 
 echo "Push to GIT repository?"
-read -r PUSH_OR_NOT
+read -r YES_OR_NOT
 
-if test "${PUSH_OR_NOT}" != 'yes'; then exit 0; fi
+if test "${YES_OR_NOT}" != 'yes'; then exit 0; fi
 
 git add . \
  && git commit -m "${REPOSITORY}:${IMAGE_TAG}" \
