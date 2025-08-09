@@ -4,11 +4,15 @@ ARCH='amd64'
 PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
-REPOSITORY="debian-${ARCH}"
-TAG='8d-bullseye'
-IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
+DEBIAN_VERSION='bullseye'
+REPOSITORY="debian-${DEBIAN_VERSION}-${ARCH}"
+IMAGE_VERSION=8
+IMAGE_FLAVOR='d'
+IMAGE_TAG="${IMAGE_VERSION}${IMAGE_FLAVOR}"
+IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${IMAGE_TAG}"
 
-docker build --no-cache -f "${ARCH}/debian/bullseye/Dockerfile" --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
+docker build --no-cache -f "${ARCH}/debian/${DEBIAN_VERSION}/Dockerfile" \
+ --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
 
 if test $? -ne 0; then
  echo "Docker build error!"; exit 21; fi
@@ -28,6 +32,7 @@ docker cp "${ARCH}/debian/bullseye/key.pgp" "${CONTAINER_NAME}:/tmp/key.pgp"
 if test $? -ne 0; then echo 'Copy error!'; exit 1; fi
 
 for it in \
+ "test \"\$(cat /etc/flavor)\" == \"${IMAGE_FLAVOR}\"" \
  'cat /etc/apt/sources.list' \
  'curl --version' \
  'openssl version' \
@@ -61,3 +66,8 @@ done
 
 docker stop "${CONTAINER_NAME}"
 docker rm -f "${CONTAINER_NAME}"
+
+docker push "${IMAGE_NAME}"
+if test $? -ne 0; then echo 'Push error!'; exit 1; fi
+
+echo "Docker image ${IMAGE_NAME} pushed."

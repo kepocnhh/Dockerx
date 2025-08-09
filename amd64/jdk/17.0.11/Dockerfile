@@ -1,4 +1,4 @@
-from docker.io/kepocnhh/debian-amd64:8c-bullseye
+from docker.io/kepocnhh/debian-amd64:8d-bullseye
 
 env JAVA_VERSION='17.0.11'
 env JAVA_HOME="/opt/jdk-${JAVA_VERSION}"

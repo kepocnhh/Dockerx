@@ -6,7 +6,7 @@ HOST='docker.io'
 NAMESPACE='kepocnhh'
 REPOSITORY="jdk-${ARCH}"
 JDK_VERSION='17.0.11'
-TAG="${JDK_VERSION}c"
+TAG="${JDK_VERSION}d"
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
 
 docker build --no-cache \

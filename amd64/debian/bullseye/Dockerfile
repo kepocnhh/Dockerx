@@ -45,3 +45,5 @@ run echo '#!/usr/local/bin/bash' > /usr/local/bin/gpgloopback.sh; \
  echo 'if test -z "${GPG_PASSWORD}"; then echo "No password!"; exit 1; fi' >> /usr/local/bin/gpgloopback.sh; \
  echo 'gpg --pinentry-mode loopback --passphrase "${GPG_PASSWORD}" $@' >> /usr/local/bin/gpgloopback.sh; \
  chmod +x /usr/local/bin/gpgloopback.sh
+
+run echo 'd' > /etc/flavor
