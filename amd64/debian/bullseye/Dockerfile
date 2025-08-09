@@ -1,8 +1,8 @@
 from docker.io/amd64/debian:bullseye-20250721-slim
 
-run echo 'deb http://deb.debian.org/debian bullseye main' > /etc/apt/sources.list
-run echo 'deb http://deb.debian.org/debian bullseye-updates main' >> /etc/apt/sources.list
-run echo 'deb http://security.debian.org/debian-security bullseye-security main' >> /etc/apt/sources.list
+run echo 'deb http://deb.debian.org/debian bullseye main' > /etc/apt/sources.list; \
+ echo 'deb http://deb.debian.org/debian bullseye-updates main' >> /etc/apt/sources.list; \
+ echo 'deb http://security.debian.org/debian-security bullseye-security main' >> /etc/apt/sources.list
 
 run apt-get update \
  && apt-get upgrade -y \
@@ -40,3 +40,8 @@ run apt-get install --no-install-recommends -y xxd \
 
 run ln -s /bin/bash /usr/local/bin/bash \
  && /usr/local/bin/bash --version
+
+run echo '#!/usr/local/bin/bash' > /usr/local/bin/gpgloopback.sh; \
+ echo 'if test -z "${GPG_PASSWORD}"; then echo "No password!"; exit 1; fi' >> /usr/local/bin/gpgloopback.sh; \
+ echo 'gpg --pinentry-mode loopback --passphrase "${GPG_PASSWORD}" $@' >> /usr/local/bin/gpgloopback.sh; \
+ chmod +x /usr/local/bin/gpgloopback.sh
