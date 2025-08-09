@@ -4,14 +4,16 @@ ARCH='amd64'
 PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
-DEBIAN_VERSION='bullseye'
-REPOSITORY="debian-${DEBIAN_VERSION}-${ARCH}"
+ISSUER='debian'
+ISSUER_VERSION='bullseye'
+REPOSITORY="${ISSUER}-${ISSUER_VERSION}-${ARCH}"
 IMAGE_VERSION=8
 IMAGE_FLAVOR='d'
 IMAGE_TAG="${IMAGE_VERSION}${IMAGE_FLAVOR}"
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${IMAGE_TAG}"
 
-docker build --no-cache -f "${ARCH}/debian/${DEBIAN_VERSION}/Dockerfile" \
+docker build --no-cache \
+ -f "${ARCH}/${ISSUER}/${ISSUER_VERSION}/Dockerfile" \
  --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
 
 if test $? -ne 0; then
@@ -71,3 +73,14 @@ docker push "${IMAGE_NAME}"
 if test $? -ne 0; then echo 'Push error!'; exit 1; fi
 
 echo "Docker image ${IMAGE_NAME} pushed."
+
+echo "Push to GIT repository?"
+read -r PUSH_OR_NOT
+
+if test "${PUSH_OR_NOT}" != 'yes'; then exit 0; fi
+
+git add . \
+ && git commit -m "${REPOSITORY}:${IMAGE_TAG}" \
+ && git tag "${REPOSITORY}/${IMAGE_TAG}" \
+ && git push \
+ && git push --tag

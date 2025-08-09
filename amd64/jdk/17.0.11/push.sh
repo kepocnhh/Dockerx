@@ -4,13 +4,16 @@ ARCH='amd64'
 PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
-REPOSITORY="jdk-${ARCH}"
-JDK_VERSION='17.0.11'
-TAG="${JDK_VERSION}d"
-IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
+ISSUER='jdk'
+ISSUER_VERSION='17.0.11'
+REPOSITORY="${ISSUER}-${ISSUER_VERSION}-${ARCH}"
+IMAGE_VERSION=1
+IMAGE_FLAVOR='d'
+IMAGE_TAG="${IMAGE_VERSION}${IMAGE_FLAVOR}"
+IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${IMAGE_TAG}"
 
 docker build --no-cache \
- -f "${ARCH}/jdk/${JDK_VERSION}/Dockerfile" \
+ -f "${ARCH}/${ISSUER}/${ISSUER_VERSION}/Dockerfile" \
  --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
 
 if test $? -ne 0; then
@@ -35,3 +38,8 @@ done
 
 docker stop "${CONTAINER_NAME}"
 docker rm -f "${CONTAINER_NAME}"
+
+docker push "${IMAGE_NAME}"
+if test $? -ne 0; then echo 'Push error!'; exit 1; fi
+
+echo "Docker image ${IMAGE_NAME} pushed."
