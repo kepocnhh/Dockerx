@@ -40,9 +40,8 @@ done
 docker stop "${CONTAINER_NAME}"
 docker rm -f "${CONTAINER_NAME}"
 
-echo "Push to Docker repository?"
+echo "Push image \"${REPOSITORY}/${IMAGE_TAG}\" to Docker repository?"
 read -r YES_OR_NOT
-
 if test "${YES_OR_NOT}" != 'yes'; then exit 0; fi
 
 docker push "${IMAGE_NAME}"
@@ -50,9 +49,8 @@ if test $? -ne 0; then echo 'Push error!'; exit 1; fi
 
 echo "Docker image ${IMAGE_NAME} pushed."
 
-echo "Push to GIT repository?"
+echo 'Push to GIT repository?'
 read -r YES_OR_NOT
-
 if test "${YES_OR_NOT}" != 'yes'; then exit 0; fi
 
 git add . \
@@ -60,6 +58,10 @@ git add . \
  && git push
 
 if test $? -ne 0; then echo 'Commit push error!'; exit 1; fi
+
+echo "Push tag \"${REPOSITORY}/${IMAGE_TAG}\" to GIT repository?"
+read -r YES_OR_NOT
+if test "${YES_OR_NOT}" != 'yes'; then exit 0; fi
 
 git tag "${REPOSITORY}/${IMAGE_TAG}" \
  && git push \
