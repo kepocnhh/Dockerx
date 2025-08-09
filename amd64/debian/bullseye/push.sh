@@ -81,6 +81,14 @@ if test "${PUSH_OR_NOT}" != 'yes'; then exit 0; fi
 
 git add . \
  && git commit -m "${REPOSITORY}:${IMAGE_TAG}" \
- && git tag "${REPOSITORY}/${IMAGE_TAG}" \
+ && git push
+
+if test $? -ne 0; then echo 'Commit push error!'; exit 1; fi
+
+git tag "${REPOSITORY}/${IMAGE_TAG}" \
  && git push \
  && git push --tag
+
+if test $? -ne 0; then echo "Tag \"${REPOSITORY}/${IMAGE_TAG}\" push error!"; exit 1; fi
+
+git log --graph --all -2
