@@ -4,13 +4,17 @@ ARCH='amd64'
 PLATFORM="linux/${ARCH}"
 HOST='docker.io'
 NAMESPACE='kepocnhh'
-REPOSITORY="multitool-${ARCH}"
-MULTITOOL_VERSION='0.5.0'
-TAG="${MULTITOOL_VERSION}c"
-IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${TAG}"
+
+ISSUER='multitool'
+ISSUER_VERSION='0.6.1'
+REPOSITORY="${ISSUER}-${ISSUER_VERSION}-${ARCH}"
+IMAGE_VERSION=1
+IMAGE_FLAVOR='d'
+IMAGE_TAG="${IMAGE_VERSION}${IMAGE_FLAVOR}"
+IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${IMAGE_TAG}"
 
 docker build --no-cache \
- -f "${ARCH}/multitool/Dockerfile" \
+ -f "${ARCH}/${ISSUER}/Dockerfile" \
  --platform="${PLATFORM}" -t "${IMAGE_NAME}" .
 
 if test $? -ne 0; then echo "Build error!"; exit 21; fi
@@ -23,11 +27,19 @@ docker rm -f "${CONTAINER_NAME}"
 docker run --platform="${PLATFORM}" \
  -e REPOSITORY_OWNER='kepocnhh' \
  -e REPOSITORY_NAME='Useless.Java.Lib' \
- -e SOURCE_COMMIT='42de2210d34ffe63de8b1020dc939feaa7175e26' \
+ -e SOURCE_COMMIT='12dbb64184ab4206b753e310e9caa0022fff6d16' \
  -e TARGET_BRANCH='master' \
  -id --name "${CONTAINER_NAME}" "${IMAGE_NAME}"
 
 if test $? -ne 0; then echo 'Run error!'; exit 1; fi
+
+docker exec "${CONTAINER_NAME}" /usr/local/bin/bash -c \
+ "test \"\$(cat /etc/flavor)\" == \"${IMAGE_FLAVOR}\""
+if test $? -ne 0; then echo 'Flavor error!'; exit 1; fi
+
+docker exec "${CONTAINER_NAME}" /usr/local/bin/bash -c \
+ "test \"\${MULTITOOL_VERSION}\" == \"${ISSUER_VERSION}\""
+if test $? -ne 0; then echo 'Version error!'; exit 1; fi
 
 for it in \
  'git init' \
@@ -59,3 +71,35 @@ done
 
 docker stop "${CONTAINER_NAME}"
 docker rm -f "${CONTAINER_NAME}"
+
+echo "Push to Docker repository?"
+read -r YES_OR_NOT
+
+if test "${YES_OR_NOT}" != 'yes'; then exit 0; fi
+
+docker push "${IMAGE_NAME}"
+if test $? -ne 0; then echo 'Docker push error!'; exit 1; fi
+
+echo "Docker image ${IMAGE_NAME} pushed."
+
+echo 'Push to GIT repository?'
+read -r YES_OR_NOT
+if test "${YES_OR_NOT}" != 'yes'; then exit 0; fi
+
+git add . \
+ && git commit -m "${REPOSITORY}:${IMAGE_TAG}" \
+ && git push
+
+if test $? -ne 0; then echo 'Commit push error!'; exit 1; fi
+
+echo "Push tag \"${REPOSITORY}/${IMAGE_TAG}\" to GIT repository?"
+read -r YES_OR_NOT
+if test "${YES_OR_NOT}" != 'yes'; then exit 0; fi
+
+git tag "${REPOSITORY}/${IMAGE_TAG}" \
+ && git push \
+ && git push --tag
+
+if test $? -ne 0; then echo "Tag \"${REPOSITORY}/${IMAGE_TAG}\" push error!"; exit 1; fi
+
+git log --graph --all -2
