@@ -2,7 +2,7 @@ from docker.io/kepocnhh/mvn-3.9.11-amd64:3d
 
 workdir /workdir
 
-env MULTITOOL_VERSION='0.6.1'
+env MULTITOOL_VERSION='0.6.2'
 env MULTITOOL_HOME="/opt/Multitool-${MULTITOOL_VERSION}"
 env mt="${MULTITOOL_HOME}"
 
