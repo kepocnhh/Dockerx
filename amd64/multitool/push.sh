@@ -6,9 +6,9 @@ HOST='docker.io'
 NAMESPACE='kepocnhh'
 
 ISSUER='multitool'
-ISSUER_VERSION='0.7.0'
+ISSUER_VERSION='0.9.0'
 REPOSITORY="${ISSUER}-${ISSUER_VERSION}-${ARCH}"
-IMAGE_VERSION=7
+IMAGE_VERSION=900
 IMAGE_FLAVOR='d'
 IMAGE_TAG="${IMAGE_VERSION}${IMAGE_FLAVOR}"
 IMAGE_NAME="${HOST}/${NAMESPACE}/${REPOSITORY}:${IMAGE_TAG}"
@@ -19,16 +19,16 @@ docker build --no-cache \
 
 if test $? -ne 0; then echo "Build error!"; exit 21; fi
 
-CONTAINER_NAME="container.${REPOSITORY}"
+CONTAINER_NAME="container-${REPOSITORY}"
 
 docker stop "${CONTAINER_NAME}"
 docker rm -f "${CONTAINER_NAME}"
 
 docker run --platform="${PLATFORM}" \
- -e REPOSITORY_OWNER='kepocnhh' \
- -e REPOSITORY_NAME='Useless.Java.Lib' \
- -e SOURCE_COMMIT='5dd636be4b8e236f0ba5df28bcd934b923b718d3' \
- -e TARGET_BRANCH='master' \
+ -e REPOSITORY_OWNER='StanleyProjects' \
+ -e REPOSITORY_NAME='Useless.Bash' \
+ -e SOURCE_COMMIT='7b01cb582cdc07af486a9dfca736a30f41559e42' \
+ -e TARGET_BRANCH='unstable' \
  -e GPG_PASSWORD='qwer1234' \
  -e GPG_KEY_ID='2AC43613F5502EB3C490D2C62CFF9BD0725E548B' \
  -id --name "${CONTAINER_NAME}" "${IMAGE_NAME}"
@@ -64,17 +64,16 @@ for it in \
  'mvn --version' \
  'gpg --version' \
  'gpg --batch --import /tmp/key.pgp' \
- 'gpg --list-keys && gpg --list-secret-keys --keyid-format=long' \
  'git config gpg.program "/usr/local/bin/gpgloopback.sh"' \
  'git config user.signingkey "${GPG_KEY_ID}"' \
- '$mt/vcs/merge.sh' \
- '$mt/java/lib/unstable/assemble.sh' \
- '$mt/vcs/commit.sh "msg" "tag"' \
- '$mt/java/lib/unstable/check.sh' \
+ '$mt/git/merge.sh' \
+ '$mt/bash/assemble.sh' \
+ '$mt/bash/check.sh' \
  'echo foobarbaz > /tmp/foo.txt' \
  '$mt/secrets/sha256.sh /tmp/foo.txt' \
  'cat /tmp/foo.txt.sha256' \
- 'cat $mt/README.md'; do
+ 'cat ${MULTITOOL_HOME}/LICENSE' \
+ 'cat ${MULTITOOL_HOME}/README.md'; do
  docker exec "${CONTAINER_NAME}" /usr/local/bin/bash -c "${it}"
  if test $? -ne 0; then echo 'Exec error!'; exit 1; fi
 done
